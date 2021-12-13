@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>AM_PACKAGE_BGA</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Source;..\Source\utils;..\Source\bsp_3p;..\Source\bsp_3p\regs;..\Source\bsp_3p\hal</IncludePath>
+              <IncludePath>..\Source;..\Source\utils;..\Source\bsp_3p;..\Source\bsp_3p\regs;..\Source\bsp_3p\hal;..\Source\heyos\include;..\Source\rt-thread\include;..\Source\rt-thread\components\finsh</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -427,6 +427,11 @@
               <FileName>heyos_hal_nand.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Source\heyos_hal_nand.c</FilePath>
+            </File>
+            <File>
+              <FileName>board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\board.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -522,6 +527,146 @@
               <FileName>am_hal_burst.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Source\bsp_3p\hal\am_hal_burst.c</FilePath>
+            </File>
+            <File>
+              <FileName>am_hal_stimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\bsp_3p\hal\am_hal_stimer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Heyos</GroupName>
+          <Files>
+            <File>
+              <FileName>heyos_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\heyos\src\heyos_port.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>RTT/src</GroupName>
+          <Files>
+            <File>
+              <FileName>clock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>components.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\components.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\cpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>idle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\idle.c</FilePath>
+            </File>
+            <File>
+              <FileName>ipc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\ipc.c</FilePath>
+            </File>
+            <File>
+              <FileName>irq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\irq.c</FilePath>
+            </File>
+            <File>
+              <FileName>kservice.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\kservice.c</FilePath>
+            </File>
+            <File>
+              <FileName>mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>memheap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\memheap.c</FilePath>
+            </File>
+            <File>
+              <FileName>mempool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\mempool.c</FilePath>
+            </File>
+            <File>
+              <FileName>object.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\object.c</FilePath>
+            </File>
+            <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\scheduler.c</FilePath>
+            </File>
+            <File>
+              <FileName>slab.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\slab.c</FilePath>
+            </File>
+            <File>
+              <FileName>thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\src\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\components\device\device.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>RTT/Port</GroupName>
+          <Files>
+            <File>
+              <FileName>cpuport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\libcpu\arm\cortex-m3\cpuport.c</FilePath>
+            </File>
+            <File>
+              <FileName>context_rvds.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\Source\rt-thread\libcpu\arm\cortex-m3\context_rvds.S</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>RTT/Finsh</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\components\finsh\cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\components\finsh\finsh_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>msh.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\components\finsh\msh.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\rt-thread\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -5,11 +5,14 @@
 #include <core_cm4.h>
 #include "main.h"
 #include "ad7147.h"
+#include "board.h"
+#include "heyos_port.h"
 #include "am_bsp_pins.h"
 #include "am_util_stdio.h"
 #include "am_mcu_apollo.h"
 #include "heyos_hal_adc.h"
 #include "heyos_hal_spi.h"
+
 
 void *phUART;
 volatile uint32_t ui32LastError;
@@ -116,8 +119,9 @@ void Uartdeinit(void)
     am_hal_gpio_pinconfig(AM_BSP_GPIO_COM_UART_RX, g_AM_HAL_GPIO_DISABLE);
 }
 
-static void BoardsInit(void)
+void BoardsInit(void)
 {
+    heyos_irq_disable();
     // Set the clock frequency.
     am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_SYSCLK_MAX, 0);
 
@@ -208,69 +212,21 @@ void am_hal_write_flash(uint32_t addr, uint32_t* buf, int len)
     }
 }
 
-struct ad714x_touchpad_plat touchpad_config = 
-{
-    .x_start_stage = 0,
-    .x_end_stage = 11,
-    .y_start_stage = 0,
-    .y_end_stage = 0,
-};
+#if 0
+	am_hal_flash_delay(500000);
+	ad714x_probe(&ad714x_config,0);
+	am_hal_flash_delay(500000);
+	ad714x_probe(&ad714x_config,1);
+#endif
 
-struct ad714x_platform_data hw_config = 
+void heyos_application_init(void)
 {
-    .touchpad = &touchpad_config,
-	.stage_cfg_reg = 
-	{
-		{0xFFFE,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},          //CIN0
-		{0xFFFB,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},          //CIN1
-		{0xFFEF,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},
-		{0xFFBF,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},
-		{0xFEFF,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},
-		{0xFBFF,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},
-		{0xEFFF,0x1FFF,0x0000,0x2626,1650,1650,1650,1650},
 
-		{0xFFFF,0x1FFE,0x0000,0x2626,1650,1650,1650,1650},         //CIN7
-		{0xFFFF,0x1FFB,0x0000,0x2626,1650,1650,1650,1650},
-        {0xFFFF,0x1FEF,0x0000,0x2626,1650,1650,1650,1650},
-		{0xFFFF,0x1FBF,0x0000,0x2626,1650,1650,1650,1650},
-		{0xFFFF,0x1EFF,0x0000,0x2626,1650,1650,1650,1650},
-	},
-//===================PWR_CONTROL Register = 0x00=======================
-//full power mode (normal operation, CDC conversions approximately every 36 ms)
-//Number of stages in sequence (N + 1) = 11	, ADC decimation factor = 64
-//Interrupt polarity control 0 = active low , enable excitation source to CINx pins
-//===================STAGE_CAL_EN Register = 0x01=======================
-//STAGE0-STAGE11 calibration enable
-//===================AMB_COMP_CTRL0 Register = 0x02=======================
-//Fast filter skip control (N + 1) = 11,	
-//FP_PROXIMITY_CNT * 16 * time for one conversion sequence in full power mode
-	.sys_cfg_reg = {0x02B0,0x0000,0x3BBB,0x0819,0x0832,0x0000,0x0000,0x0000},
-	
-};
-
-struct ad714x_chip ad714x_config = 
-{
-    .idx = 0,
-	.is_ad7417 = {false,false},
-	.read = heyos_hal_spi_read,
-	.write = heyos_hal_spi_write,
-    .hw = &hw_config,
-};
+}
 
 int main(void)
 {
-    BoardsInit();
-	heyos_hal_spim_init(SPI_IDX_AD7174_1);
-	ad7147_init(&ad714x_config);
-    ad714x_config.idx =1;
-	heyos_hal_spim_init(SPI_IDX_AD7174_2);
-    ad7147_init(&ad714x_config);
-	while(1)
-	{
-        am_hal_flash_delay(500000);
-        ad714x_probe(&ad714x_config,0);
-		am_hal_flash_delay(500000);
-		ad714x_probe(&ad714x_config,1);
-	}
+	heyos_init();
+	heyos_start();
 }
 
