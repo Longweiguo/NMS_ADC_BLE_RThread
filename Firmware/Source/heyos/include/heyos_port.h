@@ -7,10 +7,12 @@
 */
 #pragma once
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <heyos_def.h>
 
+typedef void* heyos_void_p;
 /* os entry */
 void heyos_init(void);
 void heyos_start(void);
@@ -49,11 +51,21 @@ int heyos_strcmp(const char *cs, const char *ct);
 int heyos_strlen(const char *src);
 int heyos_strnlen(const char *s, int maxlen);
 char* heyos_strncpy(char *dst, const char *src, int maxlen);
+#endif
 
 /* thread */
-typedef heyos_base_t heyos_thread_t;
+typedef heyos_void_p heyos_thread_t;
 typedef void (*heyos_thread_entry_t)(void* p_context);
-heyos_thread_t heyos_thread_create(const char* name, const heyos_thread_entry_t entry, const void* para, const heyos_stack_size_t stack_size, const heyos_priority_t prio);
+typedef struct
+{
+  void* para;
+  const char* name;
+  const heyos_thread_entry_t entry;
+  const uint32_t stack_size;
+  const uint32_t prio;
+}heyos_thread_ctx;
+
+heyos_thread_t heyos_thread_create(heyos_thread_ctx ctx);
 heyos_ret_t heyos_thread_delete(const heyos_thread_t thread);
 heyos_thread_t heyos_thread_self(void);
 heyos_ret_t heyos_thread_suspend(const heyos_thread_t thread);
@@ -66,6 +78,8 @@ heyos_ret_t heyos_delay_tick(uint32_t tick);
 uint32_t heyos_tick_from_ms(uint32_t ms);
 uint32_t heyos_tick_per_second(void);
 
+
+#if 0
 /* timer */
 typedef heyos_base_t heyos_timer_t;
 typedef void (*heyos_timer_handler_t)(void* p_context);
@@ -143,7 +157,7 @@ heyos_ret_t heyos_rwlock_read_unlock(heyos_rw_lock_t lock);
 heyos_ret_t heyos_rwlock_write_lock(heyos_rw_lock_t lock, uint32_t wait_time);
 heyos_ret_t heyos_rwlock_write_unlock(heyos_rw_lock_t lock);
 heyos_ret_t heyos_rw_lock_delete(heyos_rw_lock_t lock);
-
+#endif
 
 
 /* assert */
@@ -154,5 +168,4 @@ heyos_ret_t heyos_rw_lock_delete(heyos_rw_lock_t lock);
 void heyos_assert_handler(const char *ex, const char *func, uint32_t line);
 // runtime assert
 #define HEYOS_ASSERT(x)   if (!(x))  {heyos_assert_handler(#x, __FUNCTION__, __LINE__);}
-#endif
 

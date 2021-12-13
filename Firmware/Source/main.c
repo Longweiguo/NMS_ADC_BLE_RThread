@@ -212,18 +212,6 @@ void am_hal_write_flash(uint32_t addr, uint32_t* buf, int len)
     }
 }
 
-#if 0
-	am_hal_flash_delay(500000);
-	ad714x_probe(&ad714x_config,0);
-	am_hal_flash_delay(500000);
-	ad714x_probe(&ad714x_config,1);
-#endif
-
-void heyos_application_init(void)
-{
-
-}
-
 int main(void)
 {
 	heyos_init();

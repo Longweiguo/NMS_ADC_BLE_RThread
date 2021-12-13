@@ -23,6 +23,7 @@ extern int __bss_end;
 #define AM_SRAM_BEGIN    (&__bss_end)
 #endif
 
+struct rt_memheap sram_heap;
 struct ad714x_touchpad_plat touchpad_config = 
 {
     .x_start_stage = 0,
@@ -100,10 +101,25 @@ void systick_init(void)
     am_hal_stimer_config(AM_HAL_STIMER_XTAL_32KHZ | AM_HAL_STIMER_CFG_COMPARE_A_ENABLE);
 }
 
+void* heyos_sram_malloc(const uint32_t size)
+{
+    void* p = rt_memheap_alloc(&sram_heap, size);
+    return p;
+}
+
+void heyos_sram_free(const void* ptr)
+{
+    rt_memheap_free((void*)ptr);
+}
+void* heyos_sram_realloc(void *rmem, uint32_t newsize)
+{
+    return rt_memheap_realloc(&sram_heap, rmem, newsize);
+}
+
 void heyos_ram_init(void)
 {
     /* os menory heap && stack init */
-    rt_system_heap_init((void*)AM_SRAM_BEGIN, (void*)(AM_SRAM_END - 32));
+    rt_system_heap_init((void*)AM_SRAM_BEGIN, (void*)AM_SRAM_END);
 }
 
 void heyos_board_init(void)
@@ -117,3 +133,30 @@ void heyos_board_init(void)
 	heyos_hal_spim_init(SPI_IDX_AD7174_2);
     ad7147_init(&ad714x_config);
 }
+
+void ad714x_thread_run(void *para)
+{
+	while(1)
+	{
+		heyos_delay_ms(10);
+		ad714x_probe(&ad714x_config,0);
+		ad714x_probe(&ad714x_config,1);
+	}
+}
+
+heyos_thread_t ad714x_thread_ctx;
+const heyos_thread_ctx ctx = 
+{
+	.name = "ad714x_thread",
+	.entry = ad714x_thread_run,
+	.para = NULL,
+	.prio = 2,
+	.stack_size = 1 *1024
+};
+
+void heyos_application_init(void)
+{
+    ad714x_thread_ctx = heyos_thread_create(ctx);
+    HEYOS_ASSERT(ad714x_thread_ctx);
+}
+

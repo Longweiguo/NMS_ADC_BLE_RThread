@@ -30,10 +30,11 @@
 
 /* Memory Management */
 
-#define RT_USING_MEMPOOL
-/* RT_USING_MEMHEAP is not set */
+//#define RT_USING_MEMPOOL
+#define RT_USING_MEMHEAP
 #define RT_USING_HEAP
 #define RT_USING_SMALL_MEM
+#define RT_USING_MEMHEAP_AS_HEAP
 /* RT_USING_SLAB is not set */
 
 /* Kernel Device Object */

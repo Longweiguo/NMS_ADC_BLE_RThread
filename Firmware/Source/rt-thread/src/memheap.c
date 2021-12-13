@@ -591,12 +591,13 @@ void rt_memheap_free(void *ptr)
 }
 
 #ifdef RT_USING_MEMHEAP_AS_HEAP
-static struct rt_memheap _heap;
+extern struct rt_memheap sram_heap;
+struct rt_memheap* _heap = &sram_heap;
 
 void rt_system_heap_init(void *begin_addr, void *end_addr)
 {
     /* initialize a default heap in the system */
-    rt_memheap_init(&_heap,
+    rt_memheap_init(_heap,
                     "heap",
                     begin_addr,
                     (rt_uint32_t)end_addr - (rt_uint32_t)begin_addr);
@@ -607,7 +608,7 @@ void *rt_malloc(rt_size_t size)
     void *ptr;
 
     /* try to allocate in system heap */
-    ptr = rt_memheap_alloc(&_heap, size);
+    ptr = rt_memheap_alloc(_heap, size);
     if (ptr == RT_NULL)
     {
         struct rt_object *object;
@@ -629,7 +630,7 @@ void *rt_malloc(rt_size_t size)
             RT_ASSERT(rt_object_get_type(&heap->parent) == RT_Object_Class_MemHeap);
 
             /* not allocate in the default system heap */
-            if (heap == &_heap)
+            if (heap == _heap)
                 continue;
 
             ptr = rt_memheap_alloc(heap, size);
@@ -708,13 +709,13 @@ void rt_memory_info(rt_uint32_t *total,
                     rt_uint32_t *max_used)
 {
     if (total != RT_NULL)
-        *total = _heap.pool_size;
+        *total = _heap->pool_size;
 
     if (used  != RT_NULL)
-        *used = _heap.pool_size - _heap.available_size;
+        *used = _heap->pool_size - _heap->available_size;
 
     if (max_used != RT_NULL)
-        *max_used = _heap.max_used_size;
+        *max_used = _heap->max_used_size;
 }
 
 #endif

@@ -227,12 +227,13 @@ char* heyos_strncpy(char *dst, const char *src, int maxlen)
     dst[maxlen - 1] = '\0';
     return dst;
 }
+#endif
 
 /* thread */
-heyos_thread_t heyos_thread_create(const char* name, const heyos_thread_entry_t entry, const void* para, const heyos_stack_size_t stack_size, const heyos_priority_t prio)
+heyos_thread_t heyos_thread_create(heyos_thread_ctx ctx)
 {
     rt_thread_t thread = NULL;
-    thread = rt_thread_create(name, entry, (void*)para, stack_size, prio, 10);
+    thread = rt_thread_create(ctx.name, ctx.entry, ctx.para, ctx.stack_size, ctx.prio, 10);
     if(thread != NULL){
         rt_thread_startup(thread);
     }
@@ -294,7 +295,11 @@ uint32_t heyos_tick_from_ms(uint32_t ms)
     }
 }
 
-
+void heyos_assert_handler(const char *ex, const char *func, uint32_t line)
+{
+    rt_assert_handler(ex, func, line);
+}
+#if 0
 /* timer */
 heyos_timer_t heyos_timer_create(const char* name, heyos_timer_handler_t handler, void* para, uint32_t timeout_ms, bool is_repeat)
 {
@@ -586,12 +591,6 @@ heyos_mailbox_t heyos_mailbox_create(const char* name, uint32_t size);
 heyos_ret_t heyos_mailbox_delete(const heyos_mailbox_t mailbox);
 heyos_ret_t heyos_mailbox_send(const heyos_mailbox_t mailbox, const uint32_t value);
 heyos_ret_t heyos_mailbox_recv(const heyos_mailbox_t mailbox, uint32_t* p_value);
-
-
-void heyos_assert_handler(const char *ex, const char *func, uint32_t line)
-{
-    rt_assert_handler(ex, func, line);
-}
 
 
 /* rwlock */
